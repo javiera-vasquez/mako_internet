@@ -1,5 +1,5 @@
-# Premium Channel
-> A site for advertise the premium channel of VTR using the base from [Yeoman](http://yeoman.io)
+# Mako internet consumption graph 
+> A site for show the internet consumption graph of a family or user using the base from [Yeoman](http://yeoman.io) and [D3.js](http://d3js.org/)
 
 ## Getting Started
 
