@@ -1,5 +1,4 @@
 /*global $:false */
-
 'use strict';
 
 // ---------- Calc of the total usage in GB from a family  ---------- //
@@ -36,49 +35,39 @@ var totalUsage = function(obj, data) {
 };
 
 // ---------- Devices and user profiles selector ---------- //
-// Number of devices by kind
-var devices = [0, 0, 0, 0];
+// Number of devices by kind & Number of Users by profile
+var devices = [0, 0, 0, 0],
+	userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
 
-// Add device to userSetting.numOfDisp
-$('.devices.more').on('click', function() {
+// Add or delete a device of userSetting.numOfDisp
+$('.devices').on('click', function() {
 	var value = $(this).data('disp');
-	devices[value] += 1;
-	// $('.total').text(devices[value]);
-	// I validate if the total of devices is less than 10
-	if(userSetting.numOfDisp < 10) {userSetting.numOfDisp += 1;}
+	if($(this).hasClass('more')) {
+		devices[value] += 1;
+		// I validate if the total of devices is less than 10
+		if(userSetting.numOfDisp < 10) {userSetting.numOfDisp += 1;}
+	} else if($(this).hasClass('less')) {
+		if(devices[value] > 0) {devices[value] -= 1;}
+		// I validate if the total of devices is upper than 0
+		if(userSetting.numOfDisp > 0 && devices[value] < 10 ) {userSetting.numOfDisp -= 1;}
+	}
+	$(this).parent().find('.total').text(devices[value]);
+	event.preventDefault();
 	// console.log(devices[value], userSetting.numOfDisp);
 });
 
-// Remove device to userSetting.numOfDisp
-$('.devices.less').on('click', function() {
-	var value = $(this).data('disp');
-	if(devices[value] > 0) {devices[value] -= 1;}
-	// $('.total').text(devices[value]);
-	// I validate if the total of devices is less than 10
-	if(userSetting.numOfDisp > 0) {userSetting.numOfDisp -= 1;}
-	// console.log(devices[value], userSetting.numOfDisp);
-});
-
-// Number of Users by profile
-var userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
-
-// Add a user according to the kind
-$('.profile.more').on('click', function(){
+// Add or delete a device of userSetting.numOfDisp
+$('.profile').on('click', function(){
 	var value = $(this).data('user');
-	userTypes[value][1] += 1;
-	// $('.total').text(userTypes[value][1]);
-	// If userSetting[user] is lower to 7 I push a new user
-	if(userSetting[userTypes[value][0]] < 7) {userSetting[userTypes[value][0]] += 1;}
-	// console.log(userTypes[value][0], userTypes[value][1], userSetting[userTypes[value][0]]);
-});
-
-// Remove a user according to the kind
-$('.profile.less').on('click', function(){
-	var value = $(this).data('user');
-	if(userTypes[value][1] > 0) {userTypes[value][1] -= 1;}
-	$('.total').text(userTypes[value][1]);
-	// If userSetting[user] is lower to 7 I push a new user
-	if(userSetting[userTypes[value][0]] < 7) {userSetting[userTypes[value][0]] += 1;}
+	if($(this).hasClass('more')){
+		userTypes[value][1] += 1;
+		if(userSetting[userTypes[value][0]] < 7) {userSetting[userTypes[value][0]] += 1;}
+	} else if($(this).hasClass('less')) {
+		if(userTypes[value][1] > 0) {userTypes[value][1] -= 1;}
+		if(userSetting[userTypes[value][0]] > 0 && userTypes[value][1] < 7) {userSetting[userTypes[value][0]] -= 1;}
+	}
+	$(this).parent().find('.total').text(userTypes[value][1]);
+	event.preventDefault();
 	// console.log(userTypes[value][0], userTypes[value][1], userSetting[userTypes[value][0]]);
 });
 
