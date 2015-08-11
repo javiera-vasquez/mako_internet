@@ -20,18 +20,22 @@ var dataset= {
 		{basic: 4, medium: 11, high: 24},
 		{basic: 5, medium: 12, high: 26},
 		{basic: 5, medium: 12, high: 28},
-		{basic: 6, medium: 13, high: 30},
+		{basic: 6, medium: 13, high: 30}
 	],
 	// Table with the max value (250gb) in GB and Q
-	maxQ: {
-		basic: [13107, 5120, 4864, 1280, 640, 0, 0],
-		medium: [26214, 2389, 2176, 853, 1280, 114, 640],
-		high: [26214, 1365, 1024, 469, 1920, 171, 1024]
-	},
-	maxGB: {
-		basic: [3, 75, 95, 75, 3, 0, 0],
-		medium: [5, 35, 43, 50, 5, 100, 13],
-		high: [5, 20, 20, 28, 8, 150, 20]
+	maxValues: {
+		basic: {
+			q: [13107, 5120, 4864, 1280, 640, 0, 0],
+			gb: [3, 75, 95, 75, 3, 0, 0]
+		},
+		medium: {
+			q: [26214, 2389, 2176, 853, 1280, 114, 640],
+			gb: [5, 35, 43, 50, 5, 100, 13]
+		},
+		high: {
+			q: [26214, 1365, 1024, 469, 1920, 171, 1024],
+			gb: [5, 20, 20, 28, 8, 150, 20]
+		}
 	},
 	// Conversion table in GB
 	conversion: [0.000190735, 0.01464844, 0.00047684, 0.0585937, 0.00488281, 0.00390625 , 0.87890625, 0.01953125]
@@ -40,30 +44,41 @@ var dataset= {
 // Obj with the variables selected for the user and the total of the family
 var userSetting = {
 	numOfDisp: 4,
-	basicUser: 1,
-	mediumUser: 1,
+	basicUser: 2,
+	mediumUser: 3,
 	highUser: 0,
 	total: 0,
-	resultList: []
+	resultList: {}
 };
 
 // Calc the total usage of a family in GB
-var totalUsage = function(obj, data) {
-	var disp = data[obj.numOfDisp -1];
-	var total = (disp.basic/100 * obj.basicUser + disp.medium/100 * obj.mediumUser + disp.high/100 * obj.highUser)*250;
+var consumption = function(setting, qUsers) {
+	var disp = qUsers[setting.numOfDisp -1];
+	var total = (disp.basic/100 * setting.basicUser + disp.medium/100 * setting.mediumUser + disp.high/100 * setting.highUser)*250;
 	// I validate if the total is less than 250gb
 	return total > 250 ? 250 : Math.floor(total);
 };
 
-// Return a list of activies in base Q
-var totalOfQ = function(total, data, type) {
-	// var list = [];
-	return console.log(total, data, type);
-	// for(var i = 0; i < data.type.length; i++) {
-	// 	list.push(Math.ceil(data.type[i] * (total/250)));
-	// }
-	// return list;
+userSetting.total = consumption(userSetting, dataset.qOfUsers);
+
+// Return a list of activies in base of Q or GB
+var totalUsage = function(setting, maxValues) {
+	var list = {q: [], gb: []};
+	var total = setting.total;
+	var user;
+	// dataset.maxValues = basic, medium, high
+	if(setting.highUser > 0) {user = maxValues.high;}
+	else if(setting.medium > 0) {user = maxValues.medium;}
+	else {user = maxValues.basic;}
+	// Construct the arrays
+	for(var i = 0; i < user.q.length; i++) {
+		list.q.push(user.q[i] * (total/250));
+		list.gb.push(user.gb[i] * (total/250));
+	}
+	return list;
 };
+
+userSetting.resultList = totalUsage(userSetting, dataset.maxValues);
 
 // Return a list of activies in base of the total of a family and the kind
 var resultOfactivities = function(total, chart, conversion) {
@@ -74,8 +89,7 @@ var resultOfactivities = function(total, chart, conversion) {
 	return list;
 };
 
-userSetting.total = totalUsage(userSetting, dataset.qOfUsers);
-userSetting.resultList = resultOfactivities(40, dataset.charts.basic, dataset.conversion);
+// userSetting.resultList = resultOfactivities(40, dataset.charts.basic, dataset.conversion);
 
 $('.box-bar').each(function(i){
 	//(2098 / 4352) * 100
@@ -87,8 +101,8 @@ $('.box-bar').each(function(i){
 
 // ---------- Devices and user profiles selector ---------- //
 // Number of devices by kind & Number of Users by profile
-var devices = [0, 0, 0, 0],
-	userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
+var devices = [0, 0, 0, 0];
+var userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
 
 // Add or delete a device of userSetting.numOfDisp
 $('.devices').on('click', function() {
