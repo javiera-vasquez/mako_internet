@@ -72,31 +72,27 @@ var totalUsage = function(setting, maxValues) {
 	else {user = maxValues.basic;}
 	// Construct the arrays
 	for(var i = 0; i < user.q.length; i++) {
-		list.q.push(user.q[i] * (total/250));
-		list.gb.push(user.gb[i] * (total/250));
+		list.q.push(Math.floor(user.q[i] * (total/250)));
+		list.gb.push(Math.round( (user.gb[i] * (total/250)) * 10 ) / 10);
 	}
 	return list;
 };
 
 userSetting.resultList = totalUsage(userSetting, dataset.maxValues);
 
+// DEPRECATED
 // Return a list of activies in base of the total of a family and the kind
-var resultOfactivities = function(total, chart, conversion) {
-	var list = [];
-	for(var i = 0; i < chart.length; i++) {
-		list.push(Math.ceil((chart[i]/100 * total) / conversion[i]));
-	}
-	return list;
-};
-
+// var resultOfactivities = function(total, chart, conversion) {
+// 	var list = [];
+// 	for(var i = 0; i < chart.length; i++) {
+// 		list.push(Math.ceil((chart[i]/100 * total) / conversion[i]));
+// 	}
+// 	return list;
+// };
 // userSetting.resultList = resultOfactivities(40, dataset.charts.basic, dataset.conversion);
 
 $('.box-bar').each(function(i){
-	//(2098 / 4352) * 100
-	// var progress = Math.floor((userSetting.resultList[i] / dataset.third.medium[i]) * 100);
-	// $(this).find('.progress-bar').css('width', progress + '%');
-	$(this).find('.progress-bar').css('width', dataset.charts.basic[i] + '%');
- 	$(this).find('.result-list').text(userSetting.resultList[i]);
+ 	$(this).find('.result-list').text(userSetting.resultList.q[i]);
  });
 
 // ---------- Devices and user profiles selector ---------- //
