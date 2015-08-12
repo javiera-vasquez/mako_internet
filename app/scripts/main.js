@@ -1,7 +1,9 @@
 /*global $:false */
 'use strict';
+console.log("------------- main -------------");
 
-// ---------- Calc of the total usage in GB from a family  ---------- //
+// ---------- Dataset of a family  ---------- //
+
 var dataset= {
 	// Table with % of each activitie per user profile
 	charts: {
@@ -51,6 +53,8 @@ var userSetting = {
 	resultList: {}
 };
 
+// ---------- Calc of the total usage in GB & Q from a family  ---------- //
+
 // Calc the total usage of a family in GB
 var consumption = function(setting, qUsers) {
 	var disp = qUsers[setting.numOfDisp -1];
@@ -60,6 +64,7 @@ var consumption = function(setting, qUsers) {
 };
 
 userSetting.total = consumption(userSetting, dataset.qOfUsers);
+console.log(userSetting);
 
 // Return a list of activies in base of Q or GB
 var totalUsage = function(setting, maxValues) {
@@ -73,12 +78,13 @@ var totalUsage = function(setting, maxValues) {
 	// Construct the arrays
 	for(var i = 0; i < user.q.length; i++) {
 		list.q.push(Math.floor(user.q[i] * (total/250)));
-		list.gb.push(Math.round( (user.gb[i] * (total/250)) * 10 ) / 10);
+		list.gb.push(Math.round((user.gb[i] * (total/250)) * 10 ) / 10);
 	}
 	return list;
 };
 
 userSetting.resultList = totalUsage(userSetting, dataset.maxValues);
+console.log(userSetting.resultList);
 
 // DEPRECATED
 // Return a list of activies in base of the total of a family and the kind
@@ -91,6 +97,7 @@ userSetting.resultList = totalUsage(userSetting, dataset.maxValues);
 // };
 // userSetting.resultList = resultOfactivities(40, dataset.charts.basic, dataset.conversion);
 
+// Inject the q array in the DOM
 $('.box-bar').each(function(i){
  	$(this).find('.result-list').text(userSetting.resultList.q[i]);
  });
