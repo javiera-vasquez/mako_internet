@@ -2,28 +2,30 @@
 'use strict';
 console.log('------------- graph -------------');
 
-// ---------- Dataset of a family  ---------- //
-var baseGraph = {
+// ---------- Dataset of the graph ---------- //
+var init = {
+  usage: 0,
   label: "GB de uso mensual",
-  usage: 28,
-  value: [2, 10, 15, 20, 5, 5, 35, 8],
-  color: [2, 10, 15, 20, 5, 5, 35, 8]
+  value: [100, 0, 0, 0, 0, 0, 0, 0],
+  color: ['#ccc']
 };
 
-var dataGraph = {
-};
+var range = ['#005b7f', '#007dac', '#00a99d', '#6cc17b', '#a7003d', '#6f2c91', '#4b0049'];
+
+var message = {
+
+}
 
 // ---------- Contruct the graph  ---------- //
-
 var width = 300;
 var height = 300;
 var radius = Math.min(width, height) / 2;
 
-var svg = d3.select("#svg").append("svg")
-  .attr("width",  width)
-  .attr("height", height);
+var svg = d3.select('#svg').append('svg')
+  .attr('width',  width)
+  .attr('height', height);
 
-function render(data){
+function render(data, type, kind){
   // Bind data
   var circles = svg.selectAll("circle").data(data);
 
