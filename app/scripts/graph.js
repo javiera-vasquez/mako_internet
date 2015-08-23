@@ -11,10 +11,14 @@ var init = {
 };
 
 var range = ['#005b7f', '#007dac', '#00a99d', '#6cc17b', '#a7003d', '#6f2c91', '#4b0049'];
-
 var message = {
 
 }
+
+// render(init)
+// render(userProfile, total, palette)
+
+// renderDetail(type, userProfile, total, palette)
 
 // ---------- Contruct the graph  ---------- //
 var width = 300;

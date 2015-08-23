@@ -64,7 +64,7 @@ var consumption = function(setting, qUsers) {
 };
 
 userSetting.total = consumption(userSetting, dataset.qOfUsers);
-console.log(userSetting);
+console.log('userSetting \n', userSetting);
 
 // Return a list of activies in base of Q or GB
 var totalUsage = function(setting, maxValues) {
@@ -84,7 +84,7 @@ var totalUsage = function(setting, maxValues) {
 };
 
 userSetting.resultList = totalUsage(userSetting, dataset.maxValues);
-console.log(userSetting.resultList);
+console.log('resultList \n', userSetting.resultList);
 
 // DEPRECATED
 // Return a list of activies in base of the total of a family and the kind
