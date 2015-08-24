@@ -37,21 +37,86 @@ console.log('dataGraph \n', dataGraph);
 // color: ['#ccc']
 
 // ---------- Contruct the graph  ---------- //
-var width = 300;
-var height = 300;
+var width = 400;
+var height = 400;
+var innerRadius = 160;
 var radius = Math.min(width, height) / 2;
 
-var svg = d3.select('#svg').append('svg')
-  .attr('width',  width)
-  .attr('height', height);
+var graph = [2, 10, 15, 20, 5, 5, 35, 8];
+var color = d3.scale.ordinal().range(['#005b7f', '#007dac', '#00a99d', '#6cc17b', '#a7003d', '#6f2c91', '#4b0049']);
+
+var vis = d3.select('#chart').append("svg")
+  .data([graph])
+  .attr("width", width)
+  .attr("height", height)
+  .append("svg:g")
+  .attr("transform", "translate(" + radius + "," + radius + ")");
+
+// Bind the data to the chart
+var pie = d3.layout.pie().value(function(d){return d;});
+
+// declare an arc generator function
+var arc = d3.svg.arc()
+    .startAngle(function(d){ return d.startAngle; })
+    .endAngle(function(d){ return d.endAngle; })
+    .innerRadius(innerRadius)
+    .outerRadius(radius);
+
+// select paths, use arc generator to draw
+var arcs = vis.selectAll("g.slice")
+  .data(pie)
+  .enter()
+  .append("svg:g")
+  .attr("class", "slice");
+
+arcs.append("svg:path")
+  .attr("fill", function(d, i){
+      // log the result of the arc generator to show how cool it is :)
+      console.log(color(i));
+      return color(i);
+  })
+  .attr("d", function (d) {
+      // log the result of the arc generator to show how cool it is :)
+      console.log(arc(d));
+      return arc(d);
+  });
+
+// Create svg group for the inner text
+var text = vis.append("svg:g").attr('class', 'text-group');
+
+text.append("svg:text")                                     //add a label to each slice
+    .attr("transform", function(d) {                    //set the label's origin to the center of the arc
+      //we have to make sure to set these before calling arc.centroid
+      d.innerRadius = 20;
+      d.outerRadius = radius;
+      return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
+    })
+    .attr('class', 'text')
+    .attr("text-anchor", "center")                          //center the text on it's origin
+    .text(function() { return userSetting.totalUsage; });
+
+text.append("svg:text")                                     //add a label to each slice
+    .attr("transform", function(d) {                    //set the label's origin to the center of the arc
+      //we have to make sure to set these before calling arc.centroid
+      d.innerRadius = 20;
+      d.outerRadius = radius;
+      return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
+    })
+    .attr('class', 'text')
+    .attr("text-anchor", "center")                          //center the text on it's origin
+    .text(function() { return userSetting.totalUsage; });
+
+
+
+
 
 function render(data, type, kind){
   // Bind data
+  var pie = d3.layout.pie();
   var circles = svg.selectAll("circle").data(data);
 
   // Enter
-  circles.enter().append("circle")
-    .attr("r", 10);
+  circles.enter().append("pie").attr("r", 10);
 
   // Update
   circles
@@ -61,12 +126,5 @@ function render(data, type, kind){
   // Exit
   circles.exit().remove();
 }
-var myArrayOfObjects = [
-  { x: 100, y: 100},
-  { x: 130, y: 120},
-  { x: 80 , y: 180},
-  { x: 180, y: 80 },
-  { x: 180, y: 40 }
-];
 
-render(myArrayOfObjects);
+// render();
