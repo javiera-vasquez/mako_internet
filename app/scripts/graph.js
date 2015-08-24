@@ -53,7 +53,7 @@ var vis = d3.select('#chart').append("svg")
   .attr("transform", "translate(" + radius + "," + radius + ")");
 
 // Bind the data to the chart
-var pie = d3.layout.pie().value(function(d){return d;});
+var pie = d3.layout.pie().sort(null).value(function(d){return d;});
 
 // declare an arc generator function
 var arc = d3.svg.arc()
