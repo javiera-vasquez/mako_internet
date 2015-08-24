@@ -5,12 +5,6 @@ console.log("------------- main -------------");
 // ---------- Dataset of a family  ---------- //
 
 var dataset= {
-	// Table with % of each activitie per user profile
-	charts: {
-		basic: [1, 45, 25, 20, 5, 4, 0, 0],
-		medium: [2, 10, 15, 20, 5, 5, 35, 8],
-		high: [2, 10, 10, 10, 5, 5, 48, 10]
-	},
 	// Table Q of user and his % for profile
 	qOfUsers: [
 		{basic: 2, medium: 6, high: 12},
@@ -49,8 +43,9 @@ var userSetting = {
 	basicUser: 2,
 	mediumUser: 3,
 	highUser: 0,
-	total: 0,
-	resultList: {}
+	profile: 'medium',
+	totalUsage: 0,
+	resultList: []
 };
 
 // ---------- Calc of the total usage in GB & Q from a family  ---------- //
@@ -60,31 +55,28 @@ var consumption = function(setting, qUsers) {
 	var disp = qUsers[setting.numOfDisp -1];
 	var total = (disp.basic/100 * setting.basicUser + disp.medium/100 * setting.mediumUser + disp.high/100 * setting.highUser)*250;
 	// I validate if the total is less than 250gb
-	return total > 250 ? 250 : Math.floor(total);
+	return totalUsage > 250 ? 250 : Math.floor(total);
 };
 
-userSetting.total = consumption(userSetting, dataset.qOfUsers);
-console.log('userSetting \n', userSetting);
+userSetting.totalUsage = consumption(userSetting, dataset.qOfUsers);
 
 // Return a list of activies in base of Q or GB
 var totalUsage = function(setting, maxValues) {
-	var list = {q: [], gb: []};
-	var total = setting.total;
-	var user;
-	// dataset.maxValues = basic, medium, high
-	if(setting.highUser > 0) {user = maxValues.high;}
-	else if(setting.medium > 0) {user = maxValues.medium;}
-	else {user = maxValues.basic;}
+	var list = [];
+	var total = setting.totalUsage;
+	var user = maxValues[setting.profile];
 	// Construct the arrays
 	for(var i = 0; i < user.q.length; i++) {
-		list.q.push(Math.floor(user.q[i] * (total/250)));
-		list.gb.push(Math.round((user.gb[i] * (total/250)) * 10 ) / 10);
+		list.push([
+			Math.floor(user.q[i] * (total/250)),
+			Math.round((user.gb[i] * (total/250)) * 10 ) / 10
+		]);
 	}
 	return list;
 };
 
 userSetting.resultList = totalUsage(userSetting, dataset.maxValues);
-console.log('resultList \n', userSetting.resultList);
+console.log('userSetting \n', userSetting);
 
 // DEPRECATED
 // Return a list of activies in base of the total of a family and the kind
@@ -97,9 +89,9 @@ console.log('resultList \n', userSetting.resultList);
 // };
 // userSetting.resultList = resultOfactivities(40, dataset.charts.basic, dataset.conversion);
 
-// Inject the q array in the DOM
+// Inject the Q array in the DOM
 $('.box-bar').each(function(i){
- 	$(this).find('.result-list').text(userSetting.resultList.q[i]);
+ 	$(this).find('.result-list').text(userSetting.resultList[i][0]);
  });
 
 // ---------- Devices and user profiles selector ---------- //
