@@ -8,9 +8,9 @@ var dataGraph = {
   range: ['#005b7f', '#007dac', '#00a99d', '#6cc17b', '#a7003d', '#6f2c91', '#4b0049'],
   // Table with % of each activitie per user profile
   charts: {
-    basic: [1, 45, 25, 20, 5, 4, 0, 0],
-    medium: [2, 10, 15, 20, 5, 5, 35, 8],
-    high: [2, 10, 10, 10, 5, 5, 48, 10]
+    basic: [1, 30, 38, 30, 1, 0],
+    medium: [2,14, 17, 20, 2, 40, 5],
+    high: [2, 8, 8, 11, 3, 60, 8]
   },
   // Message of the inner graphs
   message : {
@@ -36,95 +36,90 @@ console.log('dataGraph \n', dataGraph);
 // value: [100, 0, 0, 0, 0, 0, 0, 0],
 // color: ['#ccc']
 
-// ---------- Contruct the graph  ---------- //
-var width = 400;
-var height = 400;
-var innerRadius = 160;
+// ---------- base vars  ---------- //
+var width = 425;
+var height = 425;
 var radius = Math.min(width, height) / 2;
+var innerRadius = radius - 30;
+var fontSize = 100;
+var fontFill = '#007b82'
 
-var graph = [2, 10, 15, 20, 5, 5, 35, 8];
-var color = d3.scale.ordinal().range(['#005b7f', '#007dac', '#00a99d', '#6cc17b', '#a7003d', '#6f2c91', '#4b0049']);
+// ---------- Render the graph  ---------- //
+function render(dataset){
+  // Init values for init value and reset
+  var data = dataset || [100];
+  var color = d3.scale.ordinal().range((dataset === undefined) ? ['#ccc'] : dataGraph.range);
 
-var vis = d3.select('#chart').append("svg")
-  .data([graph])
-  .attr("width", width)
-  .attr("height", height)
-  .append("svg:g")
-  .attr("transform", "translate(" + radius + "," + radius + ")");
+  // Create the base svg and take data from dataGraph
+  var vis = d3.select('#chart').append("svg")
+    .data([data])
+    .attr("width", width)
+    .attr("height", height)
+    .append("svg:g")
+    .attr("transform", "translate(" + radius + "," + radius + ")");
 
-// Bind the data to the chart
-var pie = d3.layout.pie().sort(null).value(function(d){return d;});
+  // Bind the data to the chart
+  var pie = d3.layout.pie().sort(null).value(function(d){return d;});
 
-// declare an arc generator function
-var arc = d3.svg.arc()
-    .startAngle(function(d){ return d.startAngle; })
-    .endAngle(function(d){ return d.endAngle; })
-    .innerRadius(innerRadius)
-    .outerRadius(radius);
+  // declare an arc generator function
+  var arc = d3.svg.arc()
+      .startAngle(function(d){ return d.startAngle; })
+      .endAngle(function(d){ return d.endAngle; })
+      .innerRadius(innerRadius)
+      .outerRadius(radius);
 
-// select paths, use arc generator to draw
-var arcs = vis.selectAll("g.slice")
-  .data(pie)
-  .enter()
-  .append("svg:g")
-  .attr("class", "slice");
-
-arcs.append("svg:path")
-  .attr("fill", function(d, i){
-      // log the result of the arc generator to show how cool it is :)
-      console.log(color(i));
-      return color(i);
-  })
-  .attr("d", function (d) {
-      // log the result of the arc generator to show how cool it is :)
-      console.log(arc(d));
-      return arc(d);
-  });
-
-// Create svg group for the inner text
-var text = vis.append("svg:g").attr('class', 'text-group');
-
-text.append("svg:text")                                     //add a label to each slice
-    .attr("transform", function(d) {                    //set the label's origin to the center of the arc
-      //we have to make sure to set these before calling arc.centroid
-      d.innerRadius = 20;
-      d.outerRadius = radius;
-      return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
-    })
-    .attr('class', 'text')
-    .attr("text-anchor", "center")                          //center the text on it's origin
-    .text(function() { return userSetting.totalUsage; });
-
-text.append("svg:text")                                     //add a label to each slice
-    .attr("transform", function(d) {                    //set the label's origin to the center of the arc
-      //we have to make sure to set these before calling arc.centroid
-      d.innerRadius = 20;
-      d.outerRadius = radius;
-      return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
-    })
-    .attr('class', 'text')
-    .attr("text-anchor", "center")                          //center the text on it's origin
-    .text(function() { return userSetting.totalUsage; });
-
-
-
-
-
-function render(data, type, kind){
-  // Bind data
-  var pie = d3.layout.pie();
-  var circles = svg.selectAll("circle").data(data);
-
-  // Enter
-  circles.enter().append("pie").attr("r", 10);
+  // select paths, and enter()
+  var arcs = vis.selectAll("g.slice")
+    .data(pie)
+    .enter()
+    .append("svg:g")
+    .attr("class", "slice");
 
   // Update
-  circles
-    .attr("cx", function (d){ return d.x; })
-    .attr("cy", function (d){ return d.y; });
+  arcs.append("svg:path")
+    .attr("fill", function(d, i){return color(i);})
+    .attr('opacity', 1)
+    .attr("d", function (d) {return arc(d);});
+
+  // Create svg group for the inner text
+  var text = vis.append("svg:g").attr('class', 'text-group');
+
+  // translate(0,-100)
+  text.append("svg:text")
+    .attr("transform", "translate(" + -(radius/4) + "," + 20 + ")")
+    .attr('class', 'text')
+    .attr('fill', fontFill)
+    .style("font-size", fontSize + "px")
+    .text(userSetting.totalUsage);
+
+  text.append("svg:text")
+    .attr("transform", "translate(" + -(radius/2.8) + "," + 50 + ")")
+    .attr('class', 'text')
+    .attr('fill', fontFill)
+    .style("font-size", (fontSize/5) + "px")
+    .text("GB de uso mensual");
 
   // Exit
-  circles.exit().remove();
+  arcs.exit().transition().duration(500).attr("x",1000).remove();
 }
 
+
+// function render(data, type, kind){
+//   // Bind data
+//   var pie = d3.layout.pie();
+//   var circles = svg.selectAll("circle").data(data);
+
+//   // Enter
+//   circles.enter().append("pie").attr("r", 10);
+
+//   // Update
+//   circles
+//     .attr("cx", function (d){ return d.x; })
+//     .attr("cy", function (d){ return d.y; });
+
+//   // Exit
+//   circles.exit().remove();
+// }
+
 // render();
+render(dataGraph.charts.medium);
