@@ -61,7 +61,7 @@ function render(dataset){
   // Bind the data to the chart
   var pie = d3.layout.pie().sort(null).value(function(d){return d;});
 
-  // declare an arc generator function
+  // Arc generator function, helper for arcs.append()
   var arc = d3.svg.arc()
       .startAngle(function(d){ return d.startAngle; })
       .endAngle(function(d){ return d.endAngle; })
@@ -82,20 +82,24 @@ function render(dataset){
     .attr('d', function (d) {return arc(d);});
 
   // Create svg group for the inner text
-  var text = vis.append('svg:g').attr('class', 'text-group');
+  var text = vis.append('svg:g')
+      .attr('class', 'text-group')
+      .attr('transform', 'translate(0,20)');
 
-  // translate(0,-100)
+  // Append a total text
   text.append('svg:text')
-    .attr('transform', 'translate(' + -(radius/4) + ',' + 20 + ')')
     .attr('class', 'text')
     .attr('fill', fontFill)
+    .attr("text-anchor", "middle")
     .style('font-size', fontSize + 'px')
     .text(userSetting.totalUsage);
 
+  // Append legend text
   text.append('svg:text')
-    .attr('transform', 'translate(' + -(radius/2.8) + ',' + 50 + ')')
     .attr('class', 'text')
     .attr('fill', fontFill)
+    .attr("text-anchor", "middle")
+    .attr('transform', 'translate(0,30)')
     .style('font-size', (fontSize/5) + 'px')
     .text('GB de uso mensual');
 
