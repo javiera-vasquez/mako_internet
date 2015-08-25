@@ -1,6 +1,6 @@
-/*global $:false */
+/* global $:false */
 'use strict';
-console.log("------------- main -------------");
+console.log('------------- main -------------');
 
 // ---------- Dataset of a family  ---------- //
 
