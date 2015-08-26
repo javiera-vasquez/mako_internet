@@ -51,17 +51,16 @@ function render(dataset){
   var color = d3.scale.ordinal().range((dataset === undefined) ? ['#ccc'] : dataGraph.range);
 
   // Create the base svg and take data from dataGraph
-  var vis = d3.select('#chart').append('svg')
-    .data([data])
+  var svg = d3.select('#svg').append('svg')
     .attr('width', width)
     .attr('height', height)
     .append('svg:g')
     .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
-  // Bind the data to the chart
-  var pie = d3.layout.pie().sort(null).value(function(d){return d;});
+  // pie() function for arcs values
+  var pie = d3.layout.pie().sort(null);
 
-  // Arc generator function, helper for arcs.append()
+  // Helper function to calc arc's
   var arc = d3.svg.arc()
       .startAngle(function(d){ return d.startAngle; })
       .endAngle(function(d){ return d.endAngle; })
@@ -69,20 +68,16 @@ function render(dataset){
       .outerRadius(radius);
 
   // select paths, and enter()
-  var arcs = vis.selectAll('g.slice')
-    .data(pie)
-    .enter()
-    .append('svg:g')
-    .attr('class', 'slice');
-
-  // Update
-  arcs.append('svg:path')
-    .attr('fill', function(d, i){return color(i);})
-    .attr('opacity', 1)
-    .attr('d', function (d) {return arc(d);});
+  var arcs = svg.selectAll('path')
+    .data(pie(data))
+    .enter().append('path')
+      .attr('opacity', 1)
+      .attr('class', 'slice')
+      .attr("fill", function(d, i) { return color(i); })
+      .attr('d', function (d) {return arc(d);});
 
   // Create svg group for the inner text
-  var text = vis.append('svg:g')
+  var text = svg.append('svg:g')
       .attr('class', 'text-group')
       .attr('transform', 'translate(0,20)');
 
@@ -104,26 +99,10 @@ function render(dataset){
     .text('GB de uso mensual');
 
   // Exit
-  arcs.exit().transition().duration(500).attr('x',1000).remove();
+  arcs.exit().remove();
+
+  console.log(arcs);
 }
-
-
-// function render(data, type, kind){
-//   // Bind data
-//   var pie = d3.layout.pie();
-//   var circles = svg.selectAll('circle').data(data);
-
-//   // Enter
-//   circles.enter().append('pie').attr('r', 10);
-
-//   // Update
-//   circles
-//     .attr('cx', function (d){ return d.x; })
-//     .attr('cy', function (d){ return d.y; });
-
-//   // Exit
-//   circles.exit().remove();
-// }
 
 // render();
 render(dataGraph.charts.medium);
