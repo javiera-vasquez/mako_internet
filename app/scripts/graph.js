@@ -51,7 +51,8 @@ function render(dataset){
   var color = d3.scale.ordinal().range((dataset === undefined) ? ['#ccc'] : dataGraph.range);
 
   // Create the base svg and take data from dataGraph
-  var svg = d3.select('#svg').append('svg')
+  var svg = d3.select('#svg')
+    .append('svg')
     .attr('width', width)
     .attr('height', height)
     .append('svg:g')
@@ -67,14 +68,19 @@ function render(dataset){
       .innerRadius(innerRadius)
       .outerRadius(radius);
 
-  // select paths, and enter()
-  var arcs = svg.selectAll('path')
-    .data(pie(data))
-    .enter().append('path')
-      .attr('opacity', 1)
-      .attr('class', 'slice')
-      .attr("fill", function(d, i) { return color(i); })
-      .attr('d', function (d) {return arc(d);});
+  // select paths
+  var arcs = svg.selectAll('path').data(pie(data))
+
+  // enter() state of the graph
+  arcs.enter()
+    .append('path')
+    .attr('opacity', 1)
+    .attr('class', 'slice')
+    .attr("fill", function(d, i) { return color(i); })
+    .attr('d', function (d) {return arc(d);});
+
+  // Exit
+  arcs.exit().remove();
 
   // Create svg group for the inner text
   var text = svg.append('svg:g')
@@ -98,10 +104,8 @@ function render(dataset){
     .style('font-size', (fontSize/5) + 'px')
     .text('GB de uso mensual');
 
-  // Exit
-  arcs.exit().remove();
+  console.log('asdf', arcs);
 
-  console.log(arcs);
 }
 
 // render();
