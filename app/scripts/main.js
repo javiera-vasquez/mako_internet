@@ -133,7 +133,7 @@ $('.profile').on('click', function(){
 
 // Document ready
 $(function() {
-	$('[data-toggle="tooltip"]').tooltip();
+	// $('[data-toggle="tooltip"]').tooltip();
 	$('.step.second .selectorBox:first').css('margin-left', '11.5%');
 	// $('.selectorBox').each(function(){
 	// 	$('.selectorBox .pull-right').css('height', $(this).height());
