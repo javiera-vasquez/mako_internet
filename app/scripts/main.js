@@ -4,7 +4,7 @@ console.log('------------- main -------------');
 
 // ---------- Dataset of a family  ---------- //
 
-var dataset= {
+var dataset = {
 	// Table Q of user and his % for profile
 	qOfUsers: [
 		{basic: 2, medium: 6, high: 12},
@@ -42,10 +42,7 @@ var userSetting = {
 	numOfDisp: 4,
 	basicUser: 2,
 	mediumUser: 3,
-	highUser: 0,
-	profile: 'medium',
-	totalUsage: 0,
-	resultList: []
+	highUser: 0
 };
 
 // ---------- Calc of the total usage in GB & Q from a family  ---------- //
@@ -58,41 +55,23 @@ var consumption = function(setting, qUsers) {
 	return totalUsage > 250 ? 250 : Math.floor(total);
 };
 
-userSetting.totalUsage = consumption(userSetting, dataset.qOfUsers);
-
 // Return a list of activies in base of Q or GB
-var totalUsage = function(setting, maxValues) {
+var totalUsage = function(total, maxValues, profile, type) {
 	var list = [];
-	var total = setting.totalUsage;
-	var user = maxValues[setting.profile];
+	var user = maxValues[profile];
 	// Construct the arrays
 	for(var i = 0; i < user.q.length; i++) {
-		list.push([
-			Math.floor(user.q[i] * (total/250)),
-			Math.round((user.gb[i] * (total/250)) * 10 ) / 10
-		]);
+		if(type === 'graph') {
+			list.push(Math.round((user.gb[i] * (total/250)) * 10 ) / 10);
+		} else {
+			list.push([
+				Math.floor(user.q[i] * (total/250)),
+				Math.round((user.gb[i] * (total/250)) * 10 ) / 10
+			]);
+		}
 	}
 	return list;
 };
-
-userSetting.resultList = totalUsage(userSetting, dataset.maxValues);
-console.log('userSetting \n', userSetting);
-
-// DEPRECATED
-// Return a list of activies in base of the total of a family and the kind
-// var resultOfactivities = function(total, chart, conversion) {
-// 	var list = [];
-// 	for(var i = 0; i < chart.length; i++) {
-// 		list.push(Math.ceil((chart[i]/100 * total) / conversion[i]));
-// 	}
-// 	return list;
-// };
-// userSetting.resultList = resultOfactivities(40, dataset.charts.basic, dataset.conversion);
-
-// Inject the Q array in the DOM
-$('.box-bar').each(function(i){
- 	$(this).find('.result-list').text(userSetting.resultList[i][0]);
- });
 
 // ---------- Devices and user profiles selector ---------- //
 // Number of devices by kind & Number of Users by profile
