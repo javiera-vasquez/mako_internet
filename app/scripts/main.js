@@ -2,8 +2,7 @@
 'use strict';
 console.log('------------- main -------------');
 
-// ---------- Dataset of a family  ---------- //
-
+// ---------- Dataset for calc a family consumption  ---------- //
 var dataset = {
 	// Table Q of user and his % for profile
 	qOfUsers: [
@@ -37,22 +36,65 @@ var dataset = {
 	conversion: [0.000190735, 0.01464844, 0.00047684, 0.0585937, 0.00488281, 0.00390625 , 0.87890625, 0.01953125]
 };
 
-// Obj with the variables selected for the user and the total of the family
+// Info selected by the user about her family
 var userSetting = {
-	numOfDisp: 4,
-	basicUser: 2,
-	mediumUser: 3,
+	numOfDisp: 1,
+	basicUser: 1,
+	mediumUser: 0,
 	highUser: 0
 };
+
+// Constructor of family data for use in D3
+var familyData = {
+  // User profile
+  profile: 'medium',
+  total: 70,
+  consumption: function(setting, qUsers) {
+	var disp = qUsers[setting.numOfDisp -1];
+	var total = (disp.basic/100 * setting.basicUser + disp.medium/100 * setting.mediumUser + disp.high/100 * setting.highUser)*250;
+	// I validate if the total is less than 250gb
+	return this.total = total > 250 ? 250 : Math.floor(total);
+  },
+  consumptionList: function(values){
+  	var user = values[this.profile];
+	var list = {q: [], gb: []};
+	// Construct the arrays
+	for(var i = 0; i < user.q.length; i++) {
+		list.q.push(Math.floor(user.q[i] * (this.total/250)));
+		list.gb.push(Math.round((user.gb[i] * (this.total/250)) * 10 ) / 10);
+	}
+	return this.consumption = list;
+  },
+  createMessages: function(kind) {
+
+  }
+};
+
+  // message: {
+  //   number: [7864, 1.5],
+  //   string: ['minutos de streaming de música equivalen a', 'GB de consumo']
+  // },
+
+  // messageList: {
+  //   none: 'GB de uso mensual',
+  //   mail: 'mails equivalen a',
+  //   web: 'minutos en la web equivalen a',
+  //   social: 'posts en redes sociales equivalen a',
+  //   music: 'minutos de streaming de música equivalen a',
+  //   chat: 'minutos de video llamadas equivalen a',
+  //   video: 'minutos de streaming de video equivalen a',
+  //   games: 'minutos de juegos online equivalen a'
+  // }
+
 
 // ---------- Calc of the total usage in GB & Q from a family  ---------- //
 
 // Calc the total usage of a family in GB
-var consumption = function(setting, qUsers) {
+function consumption(setting, qUsers) {
 	var disp = qUsers[setting.numOfDisp -1];
 	var total = (disp.basic/100 * setting.basicUser + disp.medium/100 * setting.mediumUser + disp.high/100 * setting.highUser)*250;
 	// I validate if the total is less than 250gb
-	return totalUsage > 250 ? 250 : Math.floor(total);
+	return total > 250 ? 250 : Math.floor(total);
 };
 
 // Return a list of activies in base of Q or GB

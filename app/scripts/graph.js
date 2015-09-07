@@ -2,16 +2,6 @@
 'use strict';
 console.log('------------- graph -------------');
 
-// ---------- Dataset of the graph ---------- //
-var dataGraph = {
-  // Table with % of each activitie per user profile
-  charts: {
-    basic: [1, 30, 38, 30, 1, 0, 0],
-    medium: [2,14, 17, 20, 2, 40, 5],
-    high: [2, 8, 8, 11, 3, 60, 8]
-  }
-};
-
 var kind = ['mail', 1]
 
 // ---------- Dataset ---------- //
