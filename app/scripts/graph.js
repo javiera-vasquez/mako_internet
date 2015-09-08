@@ -2,41 +2,9 @@
 'use strict';
 console.log('------------- graph -------------');
 
-var kind = ['mail', 1]
-
-// ---------- Dataset ---------- //
-
-var familyProfile = {
-  // User profile
-  profile: 'medium',
-  // Message for each activities
-  messageList: {
-    none: 'GB de uso mensual',
-    mail: 'mails equivalen a',
-    web: 'minutos en la web equivalen a',
-    social: 'posts en redes sociales equivalen a',
-    music: 'minutos de streaming de música equivalen a',
-    chat: 'minutos de video llamadas equivalen a',
-    video: 'minutos de streaming de video equivalen a',
-    games: 'minutos de juegos online equivalen a'
-  },
-  message: {
-    number: [7864, 1.5],
-    string: ['minutos de streaming de música equivalen a', 'GB de consumo']
-  },
-  messageB: {
-    number: [75],
-    string: ['GB de uso mensual']
-  }
-}
-
-familyProfile.total = consumption(userSetting, dataset.qOfUsers);
-familyProfile.graph = totalUsage(familyProfile.total, dataset.maxValues, familyProfile.profile, 'graph');
-familyProfile.listOf = totalUsage(familyProfile.total, dataset.maxValues, familyProfile.profile);
-
 // ---------- Dataset of the graph ---------- //
 
-console.log('userSetting \n', userSetting, '\n', 'familyProfile \n', familyProfile);
+console.log('userSetting \n', userSetting, '\n', 'familyData \n', familyData);
 
 // update() => Init graph with value 0 GB
 // update(data) => Graph with total usage of the family, express in GB
@@ -190,9 +158,5 @@ function update(dataset, type) {
 }
 
 // update();
-update(familyProfile);
+update();
 
-// Inject the Q array in the DOM
-$('.box-bar').each(function(i){
-  $(this).find('.result-list').text(familyProfile.listOf[i][0]);
- });
