@@ -31,6 +31,16 @@ var dataset = {
 			gb: [5, 20, 20, 28, 8, 150, 20]
 		}
 	},
+	// Messages of the graph
+	messages: {
+		mail: 'mails equivalen a',
+		web: 'minutos en la web equivalen a',
+		social: 'posts en redes sociales equivalen a',
+		music: 'minutos de streaming de música equivalen a',
+		chat: 'minutos de video llamadas equivalen a',
+		video: 'minutos de streaming de video equivalen a',
+		games: 'minutos de juegos online equivalen a'
+	},
 	// Conversion table in GB
 	conversion: [0.000190735, 0.01464844, 0.00047684, 0.0585937, 0.00488281, 0.00390625 , 0.87890625, 0.01953125]
 };
@@ -56,19 +66,10 @@ var familyData = {
 		}
 		return this.list = list;
 	},
-	createMessages: function() {
+	createMessages: function(messages) {
 		var i = 0;
 		var messagesList = {};
-		var messages = {
-			mail: 'mails equivalen a',
-			web: 'minutos en la web equivalen a',
-			social: 'posts en redes sociales equivalen a',
-			music: 'minutos de streaming de música equivalen a',
-			chat: 'minutos de video llamadas equivalen a',
-			video: 'minutos de streaming de video equivalen a',
-			games: 'minutos de juegos online equivalen a'
-		};
-		// Create simple base message
+		// Create base message
 		messagesList.base = {
 			number: [this.total],
 			string: ['GB de uso mensual']
@@ -87,7 +88,7 @@ var familyData = {
 		this.createProfile(setting);
 		this.consumptionTotal(setting, dataset.qOfUsers);
 		this.consumptionList(dataset.maxValues);
-		this.createMessages();
+		this.createMessages(dataset.messages);
 		return this;
 	}
 };
