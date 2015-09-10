@@ -45,10 +45,15 @@ function update(dataset, type) {
     var dataNumber = [0] ;
     var dataText = ['GB de uso mensual'];
   } else {
-    var data = dataset.graph;
+    var data = dataset.list.gb;
     var color = d3.scale.ordinal().range(colors);
-    var dataNumber = dataset.message.number;
-    var dataText = dataset.message.string;
+    if(type === undefined) {
+      var dataNumber = dataset.messages.base.number;
+      var dataText = dataset.messages.base.string;
+    } else {
+      var dataNumber = dataset.messages[type[0]].number;
+      var dataText = dataset.messages[type[0]].string;
+    }
   }
 
   console.log(dataNumber, dataText);
@@ -83,12 +88,12 @@ function update(dataset, type) {
 
   numbers
     .attr('y', function(d, i) {
-      return type === undefined ? (120 + i * 120) : (80 + i * 120);
+      return type === undefined ? (120 + i * 120) : (70 + i * 110);
     })
 
   labels
     .attr('y', function(d, i) {
-      return type === undefined ? (150 + i * 120) : (110 + i * 120);
+      return type === undefined ? (150 + i * 120) : (100 + i * 110);
     })
 
   // ENTER
@@ -103,14 +108,18 @@ function update(dataset, type) {
     .append('svg:text')
     .attr('fill', fontFill)
     .attr("text-anchor", "middle")
-    .attr('y', function(d, i) {return 120 + i * 120;})
+    .attr('y', function(d, i) {
+      return type === undefined ? (120 + i * 120) : (80 + i * 120);
+    })
     .style('font-size', function(d, i) {return fontSize + 'px';});
 
   labels.enter()
     .append('svg:text')
     .attr('fill', fontFill)
     .attr("text-anchor", "middle")
-    .attr('y', function(d, i) {return 150 + i * 120;})
+    .attr('y', function(d, i) {
+      return type === undefined ? (150 + i * 120) : (110 + i * 120);
+    })
     .style('font-size', function(d, i) {return fontSize/5 + 'px';});
 
 
@@ -121,7 +130,7 @@ function update(dataset, type) {
   // arcs.attr('d', function(d) {return arc(d);});
   arcs
     .transition()
-    .duration(750)
+    .duration(1000)
     .attrTween("d", arcTween);
 
   numbers
@@ -157,6 +166,5 @@ function update(dataset, type) {
   numbers.exit().remove();
 }
 
-// update();
 update();
 

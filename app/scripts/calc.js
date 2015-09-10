@@ -23,23 +23,23 @@ var dataset = {
 			gb: [3, 75, 95, 75, 3, 0, 0]
 		},
 		medium: {
-			q: [26214, 2389, 2176, 853, 1280, 114, 640],
+			q: [26214, 2389, 2176, 853, 1280, 1138, 640],
 			gb: [5, 35, 43, 50, 5, 100, 13]
 		},
 		high: {
-			q: [26214, 1365, 1024, 469, 1920, 171, 1024],
+			q: [26214, 1365, 1024, 469, 1920, 1707, 1024],
 			gb: [5, 20, 20, 28, 8, 150, 20]
 		}
 	},
 	// Messages of the graph
 	messages: {
 		mail: 'mails equivalen a',
-		web: 'minutos en la web equivalen a',
-		social: 'posts en redes sociales equivalen a',
-		music: 'minutos de streaming de música equivalen a',
-		chat: 'minutos de video llamadas equivalen a',
-		video: 'minutos de streaming de video equivalen a',
-		games: 'minutos de juegos online equivalen a'
+		web: 'horas en la web equivalen a',
+		social: 'horas en redes sociales equivalen a',
+		music: 'horas de streaming de música equivalen a',
+		chat: 'horas de video llamadas equivalen a',
+		video: 'horas de streaming de video equivalen a',
+		games: 'horas de juegos online equivalen a'
 	},
 	// Conversion table in GB
 	conversion: [0.000190735, 0.01464844, 0.00047684, 0.0585937, 0.00488281, 0.00390625 , 0.87890625, 0.01953125]

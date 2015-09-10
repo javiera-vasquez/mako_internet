@@ -3,7 +3,7 @@
 console.log('------------- main -------------');
 
 // ---------- Dataset cals ---------- //
-var kind = ['mail', 1]
+// var kind = ['mail', 1]
 
 // Info selected by the user about her family
 var userSetting = {
@@ -53,11 +53,21 @@ $('.profile').on('click', function(){
 	// console.log(userTypes[value][0], userTypes[value][1], userSetting[userTypes[value][0]]);
 });
 
+// Hover effect over lateral nav
+$('.box-bar').hover(
+	function(){
+		update(familyData, [$(this).data('type'), $(this).data('index')]);
+	}, function() {
+		update(familyData);
+	}
+);
+
+
 // Document ready
 $(function() {
 	$('.step.second .selectorBox:first').css('margin-left', '11.5%');
 	$('.box-bar').each(function(i){
-	  // $(this).find('.result-list').text(familyProfile.listOf[i][0]);
+	  $(this).find('.result-list').text(familyData.list.q[i]);
 	 });
 });
 
