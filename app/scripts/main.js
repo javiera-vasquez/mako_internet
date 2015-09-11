@@ -56,8 +56,10 @@ $('.profile').on('click', function(){
 // Hover effect over lateral nav
 $('.box-bar').hover(
 	function(){
+		$(this).addClass('active');
 		update(familyData, [$(this).data('type'), $(this).data('index')]);
 	}, function() {
+		$(this).removeClass('active');
 		update(familyData);
 	}
 );
