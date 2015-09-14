@@ -51,10 +51,15 @@ var familyData = {
 		return this.profile = setting.profile;
 	},
 	consumptionTotal: function(setting, users) {
+		// check values
+		var basicUser = setting.basicUser || 0;
+		var mediumUser = setting.mediumUser || 0;
+		var highUser = setting.highUser || 0;
 		var disp = users[setting.numOfDisp -1];
-		var total = (disp.basic/100 * setting.basicUser + disp.medium/100 * setting.mediumUser + disp.high/100 * setting.highUser)*250;
+		// calc
+		var total = (disp.basic/100 * basicUser + disp.medium/100 * mediumUser + disp.high/100 * highUser)*250;
 		// I validate if the total is less than 250gb
-		return this.total = total > 250 ? 250 : Math.floor(total);
+		return this.total = (total > 250) ? 250 : Math.floor(total);
 	},
 	consumptionList: function(values){
 		var user = values[this.profile];
@@ -89,6 +94,6 @@ var familyData = {
 		this.consumptionTotal(setting, dataset.qOfUsers);
 		this.consumptionList(dataset.maxValues);
 		this.createMessages(dataset.messages);
-		return this;
 	}
 };
+

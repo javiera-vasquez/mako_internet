@@ -27,6 +27,8 @@ var svg = d3.select('#svg')
   .append('svg:g')
   .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
+var innerGroup = svg.append('svg:g').attr('class', 'inner-radius');
+
 // Create svg group for the inner text
 var subGroupA = svg.append('svg:g')
   .attr('class', 'numbers')
@@ -37,7 +39,7 @@ var subGroupB = svg.append('svg:g')
   .attr('transform', 'translate(' + 0 + ',' + -(height/4) + ')');
 
 // ---------- Render and update the graph  ---------- //
-function update(dataset, type) {
+function updateGraph(dataset, type) {
   // Init values for colors and data
   if(dataset === undefined) {
     var data = [100, 0, 0, 100, 0, 0, 100];
@@ -166,5 +168,5 @@ function update(dataset, type) {
   numbers.exit().remove();
 }
 
-update();
+updateGraph();
 

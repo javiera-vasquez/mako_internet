@@ -2,74 +2,120 @@
 'use strict';
 console.log('------------- main -------------');
 
-// ---------- Dataset cals ---------- //
-// var kind = ['mail', 1]
-
-// Info selected by the user about her family
-var userSetting = {
-	numOfDisp: 5,
-	basicUser: 2,
-	mediumUser: 1,
-	highUser: 1,
-	profile: 'medium'
-};
-
-familyData.createData(userSetting, dataset);
-
-// ---------- Devices and user profiles selector ---------- //
 // Number of devices by kind & Number of Users by profile
 var devices = [0, 0, 0, 0];
 var userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
 
+// Info selected by the user about her family
+var userSetting = {
+	// profile: 'medium',
+	createProfile: function(value, status) {
+		var types = ['basic', 'medium', 'high'];
+		var profile = this.profile;
+		if(this.profile === undefined) {
+			return this.profile = types[value];
+		} else {
+			// tranform profile into number
+			for(var i = 0; i < types.length; i++) {
+				if(profile === types[i]) {
+					console.log(types[i], types[value]);
+
+					if(types[i] < types[value]) {
+						console.log('asdf');
+						return this.profile = types[value];
+					}
+				}
+			}
+		}
+	}
+}
+
 // Add or delete a device of userSetting.numOfDisp
 $('.devices').on('click', function() {
+	event.preventDefault();
+	// Read the data value from html
 	var value = $(this).data('disp');
+	// Change the values for the models
 	if($(this).hasClass('more')) {
 		devices[value] += 1;
 		// I validate if the total of devices is less than 10
-		if(userSetting.numOfDisp < 10) {userSetting.numOfDisp += 1;}
+		if(userSetting.numOfDisp < 10) {
+			userSetting.numOfDisp += 1;
+		}
+		if(userSetting.numOfDisp === undefined) {
+			userSetting.numOfDisp = 1;
+		}
 	} else if($(this).hasClass('less')) {
-		if(devices[value] > 0) {devices[value] -= 1;}
+		if(devices[value] > 0) {
+			devices[value] -= 1;
+		}
 		// I validate if the total of devices is upper than 0
-		if(userSetting.numOfDisp > 0 && devices[value] < 10 ) {userSetting.numOfDisp -= 1;}
+		if(userSetting.numOfDisp > 0 && devices[value] < 10 ) {
+			userSetting.numOfDisp -= 1;
+		}
 	}
+	// Print the value to the user
 	$(this).parent().find('.total').text(devices[value]);
-	event.preventDefault();
 	// console.log(devices[value], userSetting.numOfDisp);
 });
 
 // Add or delete a device of userSetting.numOfDisp
 $('.profile').on('click', function(){
+	event.preventDefault();
+	// Read the data value from html
 	var value = $(this).data('user');
+	var user = [userTypes[value][0]];
+	console.log(value, user);
+	// Change the values for the models
 	if($(this).hasClass('more')){
 		userTypes[value][1] += 1;
-		if(userSetting[userTypes[value][0]] < 7) {userSetting[userTypes[value][0]] += 1;}
+		if(userSetting[user] < 7) {userSetting[user] += 1;}
+		if(userSetting[user] === undefined) {userSetting[user] = 1;}
 	} else if($(this).hasClass('less')) {
-		if(userTypes[value][1] > 0) {userTypes[value][1] -= 1;}
-		if(userSetting[userTypes[value][0]] > 0 && userTypes[value][1] < 7) {userSetting[userTypes[value][0]] -= 1;}
+		if(userTypes[value][1] > 0) {
+			userTypes[value][1] -= 1;
+		}
+		if(userSetting[user] > 0 && userTypes[value][1] < 7) {
+			userSetting[user] -= 1;
+		}
 	}
+	// Print the value to the user
 	$(this).parent().find('.total').text(userTypes[value][1]);
-	event.preventDefault();
+	// Call the raph method
+	familyData.createData(userSetting, dataset);
+	updateGraph(familyData);
+
 	// console.log(userTypes[value][0], userTypes[value][1], userSetting[userTypes[value][0]]);
 });
 
-// Hover effect over lateral nav
+// Hover effect on the graph and replace data for any kind
 $('.box-bar').hover(
 	function(){
 		$(this).addClass('active');
-		update(familyData, [$(this).data('type'), $(this).data('index')]);
+		updateGraph(familyData, [$(this).data('type'), $(this).data('index')]);
 	}, function() {
 		$(this).removeClass('active');
-		update(familyData);
+		updateGraph(familyData);
 	}
 );
 
+// Reset the settings and thr graph
+$('.reset-graph').on('click', function(){
+	// Reset the model
+	userSetting = {}
+	devices = [0, 0, 0, 0];
+	userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
+	// Reset the DOM elements
+	$('.profile, .devices').parent().find('.total').text(0);
+	updateGraph();
+	event.preventDefault();
+});
 
 // Document ready
 $(function() {
 	$('.step.second .selectorBox:first').css('margin-left', '11.5%');
 	$('.box-bar').each(function(i){
-	  $(this).find('.result-list').text(familyData.list.q[i]);
+	  // $(this).find('.result-list').text(familyData.list.q[i]);
 	 });
 });
 
