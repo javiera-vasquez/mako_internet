@@ -9,24 +9,52 @@ var userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
 // Info selected by the user about her family
 var userSetting = {
 	// profile: 'medium',
-	createProfile: function(value, status) {
-		var types = ['basic', 'medium', 'high'];
-		var profile = this.profile;
-		if(this.profile === undefined) {
-			return this.profile = types[value];
-		} else {
-			// tranform profile into number
-			for(var i = 0; i < types.length; i++) {
-				if(profile === types[i]) {
-					console.log(types[i], types[value]);
+	devices: [0, 0, 0, 0],
+	userTypes: [['basicUser', 1], ['mediumUser', 0], ['highUser', 0]],
+	add: function(value, type) {
 
-					if(types[i] < types[value]) {
-						console.log('asdf');
-						return this.profile = types[value];
-					}
+	},
+	remove: function(value, type) {
+
+	},
+	editProfile: function(status, value) {
+		var profile = this.profile;
+		var types = ['basic', 'medium', 'high'];
+		// If profile equal null
+		if(status === 'add' && this.profile === undefined) {
+			return this.profile = types[value];
+		}
+		// else loop
+		for(var i = 0; i < types.length; i++) {
+			if(profile === types[i]) {
+
+				if(status === 'add' && i < value) {
+					return this.profile = types[value];
 				}
+
+				if(status === 'remove' && i === value) {
+
+					if(value > 0) {
+						for(var b = i; b > 0; b--) {
+							console.log(i, b-1, value);
+							if(this.userTypes[b-1][1] > 0) {
+								return this.profile = types[b-1];
+							}
+						}
+					} else {
+						return this.profile = undefined;
+					}
+
+				} else {
+					return this.profile;
+				}
+
 			}
 		}
+
+	},
+	reset: function() {
+
 	}
 }
 
