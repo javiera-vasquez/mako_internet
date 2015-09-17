@@ -1,10 +1,10 @@
 /* global $:false, d3:false */
 'use strict';
-console.log('------------- graph -------------');
+// console.log('------------- graph -------------');
 
 // ---------- Dataset of the graph ---------- //
 
-console.log('userSetting \n', userSetting, '\n', 'familyData \n', familyData);
+// console.log('userSetting \n', userSetting, '\n', 'familyData \n', familyData);
 
 // update() => Init graph with value 0 GB
 // update(data) => Graph with total usage of the family, express in GB
@@ -17,7 +17,7 @@ var radius = Math.min(width, height) / 2;
 var innerRadius = radius - 30;
 var fontSize = 85;
 var fontFill = '#007b82';
-var colors = ['#005b7f', '#007dac', '#00a99d', '#6cc17b', '#a7003d', '#6f2c91', '#4b0049']
+var colors = ['#005b7f', '#007dac', '#00a99d', '#6cc17b', '#a7003d', '#6f2c91', '#4b0049'];
 
 // Create the base svg and take data from dataGraph
 var svg = d3.select('#svg')
@@ -58,7 +58,7 @@ function updateGraph(dataset, type) {
     }
   }
 
-  console.log(dataNumber, dataText);
+  // console.log(dataNumber, dataText);
 
   // Setting pie value and sort
   var pie = d3.layout.pie().sort(null);
@@ -79,7 +79,7 @@ function updateGraph(dataset, type) {
   // UPDATE
   // Update old elements as needed.
   arcs
-    .attr("fill", function(d, i) { return color(i);})
+    .attr('fill', function(d, i) { return color(i);})
     .attr('opacity', function(d, i) {
       if(type !== undefined) {
         if(type[1] === i) {
@@ -91,25 +91,25 @@ function updateGraph(dataset, type) {
   numbers
     .attr('y', function(d, i) {
       return type === undefined ? (120 + i * 120) : (70 + i * 110);
-    })
+    });
 
   labels
     .attr('y', function(d, i) {
       return type === undefined ? (150 + i * 120) : (100 + i * 110);
-    })
+    });
 
   // ENTER
   // Create new elements as needed.
   arcs.enter()
     .append('path')
-    .attr("fill", function(d, i) { return color(i);})
-    .attr("d", arc)
+    .attr('fill', function(d, i) { return color(i);})
+    .attr('d', arc)
     .each(function(d) { this._current = d; }); // store the initial angles
 
   numbers.enter()
     .append('svg:text')
     .attr('fill', fontFill)
-    .attr("text-anchor", "middle")
+    .attr('text-anchor', 'middle')
     .attr('y', function(d, i) {
       return type === undefined ? (120 + i * 120) : (80 + i * 120);
     })
@@ -118,7 +118,7 @@ function updateGraph(dataset, type) {
   labels.enter()
     .append('svg:text')
     .attr('fill', fontFill)
-    .attr("text-anchor", "middle")
+    .attr('text-anchor', 'middle')
     .attr('y', function(d, i) {
       return type === undefined ? (150 + i * 120) : (110 + i * 120);
     })
@@ -133,19 +133,19 @@ function updateGraph(dataset, type) {
   arcs
     .transition()
     .duration(1000)
-    .attrTween("d", arcTween);
+    .attrTween('d', arcTween);
 
   numbers
     .transition()
     .duration(500)
-    .tween("text", textTween);
+    .tween('text', textTween);
 
   labels.text(function(d) {return d;});
 
   // Function for calc the transition of text
   function textTween(a) {
     var i = d3.interpolate(this.textContent, a);
-    var prec = (a + "").split(".");
+    var prec = (a + '').split('.');
     var round = (prec.length > 1) ? Math.pow(10, prec[1].length) : 1;
     return function(t) {
         this.textContent = Math.round(i(t) * round) / round;

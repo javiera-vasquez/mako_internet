@@ -1,5 +1,5 @@
 'use strict';
-console.log('------------- calc -------------');
+// console.log('------------- calc -------------');
 
 // ---------- Dataset for calc a family consumption  ---------- //
 var dataset = {
@@ -48,7 +48,8 @@ var dataset = {
 // Constructor of family data for use in D3
 var familyData = {
 	createProfile: function(setting) {
-		return this.profile = setting.profile;
+		this.profile = setting.profile;
+		return;
 	},
 	consumptionTotal: function(setting, users) {
 		// check values
@@ -59,7 +60,8 @@ var familyData = {
 		// calc
 		var total = (disp.basic/100 * basicUser + disp.medium/100 * mediumUser + disp.high/100 * highUser)*250;
 		// I validate if the total is less than 250gb
-		return this.total = (total > 250) ? 250 : Math.floor(total);
+		this.total = (total > 250) ? 250 : Math.floor(total);
+		return;
 	},
 	consumptionList: function(values){
 		var user = values[this.profile];
@@ -69,7 +71,8 @@ var familyData = {
 			list.q.push(Math.floor(user.q[i] * (this.total/250)));
 			list.gb.push(Math.round((user.gb[i] * (this.total/250)) * 10 ) / 10);
 		}
-		return this.list = list;
+		this.list = list;
+		return;
 	},
 	createMessages: function(messages) {
 		var i = 0;
@@ -87,13 +90,15 @@ var familyData = {
 			};
 			i++;
 		}
-		return this.messages = messagesList;
+		this.messages = messagesList;
+		return;
 	},
 	createData: function(setting, dataset) {
 		this.createProfile(setting);
 		this.consumptionTotal(setting, dataset.qOfUsers);
 		this.consumptionList(dataset.maxValues);
 		this.createMessages(dataset.messages);
+		return;
 	}
 };
 
