@@ -40,6 +40,7 @@ $icon-font-path: '../fonts/';
 $white: #fff;
 $black: #000;
 $ccc: #ccc;
+$light: #f2f2f2;
 
 // Basic
 $primary: #007b82;
@@ -51,6 +52,7 @@ $good: #3BA656;
 $bad: #D05050;
 $alert: #f2d84b;
 $red: $bad;
+$asset: #8c004c;
 
 // Colors array
 $colors: #005b7f, #007dac, #00a99d, #6cc17b, #a7003d, #6f2c91, #4b0049;
@@ -73,7 +75,7 @@ body {
   padding: 0;
 }
 
-#toolbox, #graph {margin: 1em 2em;}
+#toolbox, #graph, #guide {margin: 1em 2em;}
 
 /* Header */
 #top {
@@ -187,6 +189,10 @@ body {
   }
 }
 
+.step.disable {
+  opacity: .75;
+}
+
 #graph {
   h4 {
     @include light;
@@ -222,6 +228,8 @@ body {
     }
     .box-bar.active:nth-child(#{$i}){
       background-color: rgba($c, 0.15);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba($black, .25);
     }
 }
 
@@ -229,6 +237,59 @@ body {
   width: 425px;
   height: 425px;
   margin: 0 auto;
+}
+
+#reset {
+  padding: 2em;
+  text-align: center;
+  .reset-graph {
+    color: $asset;
+  }
+}
+
+#guide {
+  padding-top: 2em;
+    .panel {
+      background-color: $light;
+      border: 1px solid $ccc;
+      padding: 1em 1.5em;
+      border-radius: 0;
+    }
+    h4  {
+      @include light;
+      color: $asset;
+      font-size: 16px;
+    }
+    p {color: darken($ccc, 40%);}
+    .small-text {
+      color: darken($ccc, 40%);
+      font-size: 12px;
+    }
+    .kind-loop {
+      list-style: none;
+      padding: 0;
+      margin: 2.5em 0 1em;
+      width: 100%;
+      li {
+        @include left;
+        width: 14.2%;
+        text-align: center;
+        p {
+        color: darken($ccc, 60%);
+        line-height: 1.5;
+        margin-bottom: 10px;
+        }
+        img {width: 60px;}
+        .weight{
+          @include bold;
+          font-size: 1em;
+        }
+        .detail {
+          color: $asset;
+          font-size: .8em;
+        }
+      }
+    }
 }
 
 /* Media querys */

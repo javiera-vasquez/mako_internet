@@ -132,6 +132,7 @@ $('.devices').on('click', function() {
 		familyData.createData(userSetting, dataset);
 		updateGraph(familyData);
 	}
+	$('.step.second').removeClass('disable');
 	// console.log(devices[value], userSetting.numOfDisp);
 	event.preventDefault();
 });
@@ -187,7 +188,7 @@ $('.box-bar').hover(
 );
 
 // Reset the settings and thr graph
-$('.reset-graph').on('click', function(){
+$('#reset .reset-graph').on('click', function(){
 	updateGraph();
 	userSetting.reset();
 	$('.box-bar .result-list').text(0);
@@ -197,6 +198,7 @@ $('.reset-graph').on('click', function(){
 // Document ready
 $(function() {
 	$('.step.second .selectorBox:first').css('margin-left', '11.5%');
+	$('.step.second').addClass('disable');
 });
 
 
