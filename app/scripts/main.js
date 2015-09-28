@@ -1,11 +1,12 @@
-/* global $:false, console:false, familyData:false, dataset:false, updateGraph:false */
+/* global $:false, console:false */
 
 'use strict';
 console.log('------------- main -------------');
 
-// Number of devices by kind & Number of Users by profile
-// var devices = [0, 0, 0, 0];
-// var userTypes = [['basicUser', 0], ['mediumUser', 0], ['highUser', 0]];
+// Init values
+var familyData = familyData || undefined;
+var dataset = dataset || undefined;
+var updateGraph = updateGraph || undefined;
 
 // Info selected by the user about her family
 var userSetting = {
@@ -121,18 +122,27 @@ $('.devices').on('click', function() {
 	// Change the values on the models
 	if($(this).hasClass('more')) {
 		userSetting.add('device', value);
+		$('.step.second').removeClass('disable');
+		if(userSetting.profile !== undefined) {
+			$('#graph').removeClass('disable');
+		}
 	}
 	if($(this).hasClass('less')) {
 		userSetting.remove('device', value);
 	}
 	// Print the value to the user
 	$(this).parent().find('.total').text(userSetting.devices[value]);
-	// Print the graph
+	// Reset the graph and data
+	if(userSetting.numOfDisp === 0) {
+		updateGraph();
+		$('.box-bar .result-list').text(0);
+		$('.step.second, #graph').addClass('disable');
+	}
+	// Update graph & data
 	if(userSetting.profile !== undefined) {
 		familyData.createData(userSetting, dataset);
 		updateGraph(familyData);
 	}
-	$('.step.second').removeClass('disable');
 	// console.log(devices[value], userSetting.numOfDisp);
 	event.preventDefault();
 });
@@ -147,6 +157,7 @@ $('.profile').on('click', function(){
 			userSetting.defineProfile('add', value);
 		}
 		userSetting.add('profile', value);
+		$('#graph').removeClass('disable');
 	}
 	if($(this).hasClass('less')) {
 		if(userValue === 1) {
@@ -160,6 +171,7 @@ $('.profile').on('click', function(){
 	// Print the graph
 	if(userSetting.profile === undefined) {
 		$('.box-bar .result-list').text(0);
+		$('#graph').removeClass('disable');
 		updateGraph();
 	} else {
 		familyData.createData(userSetting, dataset);
@@ -175,12 +187,12 @@ $('.profile').on('click', function(){
 // Hover effect on the graph and replace data for any kind
 $('.box-bar').hover(
 	function(){
-		if(userSetting.profile !== undefined) {
+		if(userSetting.numOfDisp !== 0 && userSetting.profile !== undefined) {
 			$(this).addClass('active');
 			updateGraph(familyData, [$(this).data('type'), $(this).data('index')]);
 		}
 	}, function() {
-		if(userSetting.profile !== undefined) {
+		if(userSetting.numOfDisp !== 0 && userSetting.profile !== undefined) {
 			$(this).removeClass('active');
 			updateGraph(familyData);
 		}
@@ -192,13 +204,29 @@ $('#reset .reset-graph').on('click', function(){
 	updateGraph();
 	userSetting.reset();
 	$('.box-bar .result-list').text(0);
+	$('.step.second, #graph').addClass('disable');
 	event.preventDefault();
+});
+
+$('.close-carousel').on('click', function(){
+	// $('#carousel').fadeOut('fast');
+	$('#carousel').addClass('animated fadeOut').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+			$(this).hide();
+	});
 });
 
 // Document ready
 $(function() {
-	$('.step.second .selectorBox:first').css('margin-left', '11.5%');
-	$('.step.second').addClass('disable');
+	$('.step.second, #graph').addClass('disable');
+	$('.glyphicon-chevron-right').addClass('animated shake');
+	$('[data-toggle="popover"]').popover({
+		html: true,
+		trigger: 'focus',
+		placement: 'bottom'
+	});
+	$('[data-toggle="popover"]').on('click', function (e) {
+	    $('[data-toggle="popover"]').not(this).popover('hide');
+	});
+	$('.carousel').carousel({interval: false})
 });
-
 
