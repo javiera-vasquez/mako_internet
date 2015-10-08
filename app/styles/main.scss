@@ -329,7 +329,7 @@ a:focus {outline:0;}
 
 #carousel {
   background:#005a7f url(../images/bg-intro.png) no-repeat right bottom;
-  min-height: 245px;
+  min-height: 250px;
   animation-duration: .5s;
   .block {
     padding-top: 3em;
@@ -351,6 +351,9 @@ a:focus {outline:0;}
         }
       }
     }
+  }
+  .carousel-indicators {
+    bottom: 0;
   }
   .item {
     color: $white;
