@@ -49,7 +49,7 @@ $tooltip: #aed477;
 
 // Alerts
 $good: #3BA656;
-$bad: #D05050;
+$bad: #fa4266;
 $alert: #f2d84b;
 $red: $bad;
 $asset: #8c004c;
@@ -66,8 +66,8 @@ body, h1, h2, h3, h4, h5, h5 {
 body {
   @include normal;
   position: relative;
-  // padding-top: 70px;
-  background-color: #f5f5f5;
+  padding-bottom: 100px;
+  background: #f5f5f5 url(../images/bgSitio.jpg);
 }
 
 a:focus {outline:0;}
@@ -79,7 +79,40 @@ a:focus {outline:0;}
   padding: 0;
 }
 
-#toolbox, #graph, #guide {margin: 1em 2em;}
+#toolbox, #graph, #guide {
+  margin: 1em 2em;
+  .panel {
+    background-color: $light;
+    border: 1px solid $ccc;
+    padding: 1em 1.5em;
+    border-radius: 0;
+  }
+}
+
+/* Toolbar of the sites from VTR */
+.toolbar {
+  margin-bottom: 50px;
+  height: 44px;
+  background-color: black;
+  border-bottom: 1px solid rgba(white, 0.25);
+  .container {
+    background: url(../images/vtrlogochico.png) no-repeat right;
+  }
+  ul {
+    margin-top: 12px;
+    li {
+      border-right: 1px solid rgba(white, 0.8);
+      padding-right: 10px;
+      // line-height: 16px;
+      &:last-child {border-right: none;}
+      a {
+        color: rgba(white, 0.8);
+        font-size: 12px;
+        // line-height: 14px;
+      }
+    }
+  }
+}
 
 /* Header */
 #top {
@@ -107,6 +140,13 @@ a:focus {outline:0;}
   }
 }
 
+#introduction {
+  margin: 2em;
+  span {
+    color: $red;
+  }
+}
+
 /* Loop of selectors for user and device */
 #toolbox {
   h4 {@include light;}
@@ -116,9 +156,17 @@ a:focus {outline:0;}
     margin: 1%;
   }
   .step {
-    border-bottom: 1px solid $ccc;
-    padding-bottom: 1.5em;
-    margin-bottom: 1em;
+    // border-bottom: 1px solid $ccc;
+    // padding-bottom: 1.5em;
+    // margin-bottom: 1em;
+  }
+  .step-label {
+    @include bold;
+    width: 70px;
+    padding: 5px 10px;
+    margin: -1em 0 0 -1.5em;
+    background-color: $red;
+    color: $white;
   }
   .fake-margin {
     width: 11.5%;
@@ -206,7 +254,7 @@ a:focus {outline:0;}
 }
 
 .step.disable {
-  opacity: .75;
+  opacity: .8;
 }
 
 #graph {
@@ -218,6 +266,7 @@ a:focus {outline:0;}
     border: 1px solid $ccc;
   }
   .box-bar {
+    background-color: $white;
     border-bottom: 1px solid $ccc;
     padding: 2.5rem 2rem 2rem;
     p {
@@ -237,7 +286,7 @@ a:focus {outline:0;}
 }
 
 #graph.disable {
-  opacity: .75;
+  opacity: .8;
 }
 
 @for $i from 1 through length($colors) {
@@ -268,13 +317,7 @@ a:focus {outline:0;}
 }
 
 #guide {
-  padding-top: 2em;
-    .panel {
-      background-color: $light;
-      border: 1px solid $ccc;
-      padding: 1em 1.5em;
-      border-radius: 0;
-    }
+  padding-top: 1em;
     h4  {
       @include light;
       color: $asset;
